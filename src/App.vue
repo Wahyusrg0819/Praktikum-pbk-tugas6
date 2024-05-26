@@ -35,7 +35,7 @@ export default {
 
     async function load() {
       try {
-        const response = await axios.get('http://localhost:3100/articles');
+        const response = await axios.get('http://localhost:3002/articles');
         articles.value = response.data;
       } catch (error) {
         console.error('Error loading articles:', error);
@@ -44,7 +44,7 @@ export default {
 
     async function save() {
       try {
-        const response = await axios.post('http://localhost:3100/articles', form);
+        const response = await axios.post('http://localhost:3002/articles', form);
         articles.value.push(response.data);
         form.title = '';
         form.content = '';
@@ -55,7 +55,7 @@ export default {
 
     async function remove(id) {
       try {
-        await axios.delete(`http://localhost:3100/articles/${id}`);
+        await axios.delete(`http://localhost:3002/articles/${id}`);
         articles.value = articles.value.filter(article => article.id !== id);
       } catch (error) {
         console.error('Error deleting article:', error);
