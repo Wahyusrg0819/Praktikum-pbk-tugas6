@@ -1,15 +1,17 @@
 <template>
   <div class="form-control">
     <form @submit.prevent="save">
-      <input class="input input-alt" type="text" required="" v-model="form.title" placeholder="Title">
+      <input class="input input-alt" type="text" required v-model="form.title" placeholder="Title">
       <span class="input-border input-border-alt"></span>
-      <textarea class="input input-alt" v-model="form.content" required="" placeholder="Content"></textarea>
+      <textarea class="input input-alt" v-model="form.content" required placeholder="Content"></textarea>
       <span class="input-border input-border-alt"></span>
       <br />
       <button class="button" type="submit">Save</button>
     </form>
     <button class="button" @click="load">Load</button>
-    <ul>
+    <div v-if="loading" class="loading-spinner">Loading...</div>
+    <div v-if="error" class="error-message">{{ error }}</div>
+    <ul v-if="!loading && !error">
       <li v-for="article in articles" :key="article.id">
         {{ article.title }}<br />
         {{ article.content }}<br />
@@ -32,13 +34,20 @@ export default {
     });
 
     const articles = ref([]);
+    const loading = ref(false);
+    const error = ref('');
 
     async function load() {
+      loading.value = true;
+      error.value = '';
       try {
         const response = await axios.get('http://localhost:3002/articles');
         articles.value = response.data;
-      } catch (error) {
-        console.error('Error loading articles:', error);
+      } catch (err) {
+        error.value = 'Error loading articles: ' + err.message;
+        console.error('Error loading articles:', err);
+      } finally {
+        loading.value = false;
       }
     }
 
@@ -69,13 +78,22 @@ export default {
 
     onMounted(load);
 
-    return { form, articles, save, edit, remove, load };
+    return { form, articles, save, edit, remove, load, loading, error };
   }
 };
 </script>
 
 
 <style scoped>
+.loading-spinner {
+  font-size: 1.5em;
+  color: #666;
+}
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
 ul {
   list-style-type:none; /* Menghilangkan bullet points */
   background-color: transparent;
