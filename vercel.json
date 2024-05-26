@@ -1,9 +1,7 @@
 {
     "rewrites": [
-      {
-        "source": "/api/:match*",
-        "destination": "/api/articles/index.js"
-      }
+      { "source": "/api/articles", "destination": "/api/articles/index.js" },
+      { "source": "/api/articles/:id", "destination": "/api/articles/[id].js" }
     ]
   }
   
