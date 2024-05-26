@@ -41,7 +41,7 @@ export default {
       loading.value = true;
       error.value = '';
       try {
-        const response = await axios.get('/api/articles');
+        const response = await axios.get('http://localhost:3002/articles');
         articles.value = response.data;
       } catch (err) {
         error.value = 'Error loading articles: ' + err.message;
@@ -53,7 +53,7 @@ export default {
 
     async function save() {
       try {
-        const response = await axios.post('/api/articles', form);
+        const response = await axios.post('http://localhost:3002/articles', form);
         articles.value.push(response.data);
         form.title = '';
         form.content = '';
@@ -64,7 +64,7 @@ export default {
 
     async function remove(id) {
       try {
-        await axios.delete(`/api/articles/${id}`);
+        await axios.delete(`http://localhost:3002/articles/${id}`);
         articles.value = articles.value.filter(article => article.id !== id);
       } catch (error) {
         console.error('Error deleting article:', error);
